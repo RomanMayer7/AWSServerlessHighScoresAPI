@@ -40,7 +40,8 @@ namespace AWSServerlessHighScoresAPI
             {
                 options.AddPolicy("CorsPolicy",
                     builder => builder.WithOrigins("http://classic-snake-angular.s3-website-eu-west-1.amazonaws.com",
-                    "http://classic-msweeper-angular.s3-website-eu-west-1.amazonaws.com", "http://localhost:4200")
+                    "http://classic-msweeper-angular.s3-website-eu-west-1.amazonaws.com",
+                    "http://classic-tetris-angular.s3-website-eu-west-1.amazonaws.com","http://localhost:4200")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());

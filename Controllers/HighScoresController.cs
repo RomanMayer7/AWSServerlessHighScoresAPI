@@ -88,5 +88,40 @@ namespace AWSServerlessHighScoresAPI.Controllers
             }
         }
 
+        //==================ENDPOINTS FOR TETRIS GAME=============================================================================
+        [HttpGet]
+        [Route("GetHighScoresList3")] //Get HighscoresList for Table 'MSweeper-HighScores'
+        public async Task<ActionResult<IEnumerable<GameRecord3>>> GetHighScoresList3()
+        {
+            var result = await _highscoresService.GetItemsFromDynamoDBTable3();
+            result = result.OrderByDescending(x => x.Score).Take(10);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("AddNewRecord3")]
+        public async Task<IActionResult> AddNewRecord3([FromBody]GameRecord3 model)
+        {
+            if (ModelState.IsValid)
+            {
+                //Generate Unique ID----------------------------------------------------
+                var rfc4122bytes = Convert.FromBase64String("aguidthatIgotonthewire==");
+                Array.Reverse(rfc4122bytes, 0, 4);
+                Array.Reverse(rfc4122bytes, 4, 2);
+                Array.Reverse(rfc4122bytes, 6, 2);
+                var guid = new Guid(rfc4122bytes);
+                //----------------------------------------------------------------------
+                model.Id = guid.ToString(); //assign to model
+
+                await _highscoresService.AddItemToDynamoDBTable3(model);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
     }
 }

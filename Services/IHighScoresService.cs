@@ -11,8 +11,11 @@ namespace AWSServerlessHighScoresAPI.Services
 
         public Task<IEnumerable<GameRecord>> GetItemsFromDynamoDBTable1();
         public Task<IEnumerable<GameRecord2>> GetItemsFromDynamoDBTable2();
+        public Task<IEnumerable<GameRecord3>> GetItemsFromDynamoDBTable3();
+
         public  Task AddItemToDynamoDBTable1(GameRecord record);
         public Task AddItemToDynamoDBTable2(GameRecord2 record);
+        public Task AddItemToDynamoDBTable3(GameRecord3 record);
 
     }
 }

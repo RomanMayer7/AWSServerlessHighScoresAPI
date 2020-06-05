@@ -15,6 +15,7 @@ namespace AWSServerlessHighScoresAPI.Services
     {
         private IEnumerable<GameRecord> highscores;
         private IEnumerable<GameRecord2> highscores2;
+        private IEnumerable<GameRecord3> highscores3;
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.EUWest1;
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient(bucketRegion);
 
@@ -73,6 +74,41 @@ namespace AWSServerlessHighScoresAPI.Services
 
 
         public async Task AddItemToDynamoDBTable2(GameRecord2 record)
+        {
+            DynamoDBContextConfig config = new DynamoDBContextConfig
+            {
+                ConsistentRead = false,
+                Conversion = DynamoDBEntryConversion.V2
+            };
+
+            using (DynamoDBContext context = new DynamoDBContext(client, config))
+            {
+                await context.SaveAsync(record);
+            }
+
+
+        }
+
+        //==================DYNAMO DB SERVICES FOR TETRIS GAME=============================================================================
+        public async Task<IEnumerable<GameRecord3>> GetItemsFromDynamoDBTable3()
+        {
+            DynamoDBContextConfig config = new DynamoDBContextConfig
+            {
+                ConsistentRead = false,
+                Conversion = DynamoDBEntryConversion.V2
+            };
+
+            using (DynamoDBContext context = new DynamoDBContext(client, config))
+            {
+                // you can add scan conditions, or leave empty
+                var conditions = new List<ScanCondition>();
+                highscores3 = await context.ScanAsync<GameRecord3>(conditions).GetRemainingAsync();
+            }
+            return highscores3;
+        }
+
+
+        public async Task AddItemToDynamoDBTable3(GameRecord3 record)
         {
             DynamoDBContextConfig config = new DynamoDBContextConfig
             {
